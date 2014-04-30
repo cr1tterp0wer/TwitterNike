@@ -1,30 +1,38 @@
-var casper = require('casper').create();
-var x = require('casper').selectXPath;
+/* var page = require('webpage').create();
+page.open('http://www.netflix.com', function() {
+ 
+  printcookie();
 
-casper.start('http://www.guru.com/emp/search.aspx?keyword=#&&page=1&sort=Earnings');
 
-/*casper.then(function() {
-    this.test.assertExists({
-        type: 'xpath',
-        path: '//*[@class="paddingLeft5 txt11px txt666"]/a[text()="Next"]'
-    }, "Got Here");
-});
+  phantom.exit();
+});  
+
+var http_request = new XMLHttpRequest();
+    http_request.open("GET", "http://www.google.com", true);
+
+
+function printcookie()
+{
+  var cookie= document.cookie;
+  console.log(cookie);
+}
 */
-casper.then(function() {
-    var firstUrl = this.getCurrentUrl()
+
+
+//to disable cookies, run casperjs --cookies-file=/dev/null? cookies.js
+ 
+var casper = require('casper').create();
+ 
+casper.start('http://www.nike.com/', function() {
+    this.echo('Browser Cookie: ' + this.evaluate(function() {
+        return document.cookie;
+    }));
+});
+ 
+casper.run(function() {
+    this.echo('Done.').exit();
 });
 
-casper.thenClick(x('//*[@class="paddingLeft5 txt11px txt666"]/a[text()="Next"]'), function() {
-    console.log("Woop!");
-});
-
-casper.waitFor(function check() {
-    return this.evaluate(function() {
-        return this.getCurrentUrl() != firstUrl;
-    });
-}, function then() {
-    console.log(this.getCurrentUrl());
-});
 
 
-casper.run();
+

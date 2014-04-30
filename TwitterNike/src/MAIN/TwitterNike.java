@@ -4,6 +4,13 @@ import twitter4j.api.SearchResource;
 import twitter4j.conf.ConfigurationBuilder;
 
 import java.io.IOException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.CookieStore;
+import java.net.HttpCookie;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 
@@ -25,10 +32,12 @@ public class TwitterNike {
 		tf = new TwitterFactory(cb.build());
 		twitter = tf.getInstance();
 		
-       listUsers("lyft",1);
+       //listUsers("lyft",1);
 	   //NikeStore 17351972
        //showHomeTweetsList();
 	   //showUserInfoById(569569550);
+       
+       getCookieUsingCookieHandler("http://www.nike.com");
 		
 		
 	}
@@ -86,5 +95,35 @@ public class TwitterNike {
 			
 	        
 	}
+	
+	public static void getCookieUsingCookieHandler(String _url) { 
+	    try {       
+	        // Instantiate CookieManager;
+	        // make sure to set CookiePolicy
+	        CookieManager manager = new CookieManager();
+	        manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
+	        CookieHandler.setDefault(manager);
+
+	        // get content from URLConnection;
+	        // cookies are set by web site
+	        URL url = new URL(_url);
+	        URLConnection connection = url.openConnection();
+	        connection.getContent();
+
+	        // get cookies from underlying
+	        // CookieStore
+	        CookieStore cookieJar =  manager.getCookieStore();
+	        List <HttpCookie> cookies =
+	            cookieJar.getCookies();
+	        for (HttpCookie cookie: cookies) {
+	          System.out.println("CookieHandler retrieved cookie: " + cookie);
+	        }
+	       //[<Cookie geoloc=cc=US,rc=CA,tp=vhigh,tz=PST,la=37.7795,lo=-122.4195,bw=5000 for .www.nike.com/>]>
+	        
+	    } catch(Exception e) {
+	        System.out.println("Unable to get cookie using CookieHandler");
+	        e.printStackTrace();
+	    }
+	}  
 
 }
