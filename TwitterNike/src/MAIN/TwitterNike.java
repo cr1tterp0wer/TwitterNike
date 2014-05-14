@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-import Selenium.Sscraper;
-import Twitter.Tlistener;
+
+import Twitter.TStreamer;
 
 public class TwitterNike {
 
-	static Tlistener tl;
-	static Sscraper  scrape;
+	static TStreamer tl;
+    static String username, password;
 	
 	//arg[0] = username,  arg[1] = pass  :store.Nike.com
 	//arg[2] = ConsumerKey, arg[3] = ConsumerSecret
@@ -18,28 +18,28 @@ public class TwitterNike {
 	//arg[6] = TwitterId
 	public static void main(String[] args)
 	{
+		
 		if(init(args))
 		{
 			launch();
 		}
-			
-
 	}
 	
-	public static void launch()
+	private static void launch()
 	{
-		
-		
+		tl.launch();
 	}
 	
-	public static boolean init(String[] _args)
+	private static boolean init(String[] _args)
 	{
 		String[] args = _args;
 		
 		if(args.length == 7)
 		{
-      	  scrape = new Sscraper( args[0], args[1] );
-		  tl     = new Tlistener(args[2], args[3], args[4],args[5],args[6]);
+		  //Intantiate your vars
+		  username = args[0];
+		  password = args[1];
+		  tl     = new TStreamer(args[2], args[3], args[4],args[5],args[6]);
 		  return true;
 		}
 		//manage with a file
@@ -58,15 +58,23 @@ public class TwitterNike {
 			  String   input = stringBuffer.toString();
 			  String[] split = input.split("\\s+");
 			  
-			  for(int i=0;i<split.length;i++)
-				  System.out.println(split[i]);
+			  //Intantiate your vars
+			  username = split[0];
+			  password = split[1];
+			  tl     = new TStreamer(split[2], split[3], split[4], split[5], split[6]);
+			  
 			  return true;
 			}catch(IOException e){System.out.println(e.getMessage());}
 			
 		}
+		System.out.println("Error: Illegal Arguments!");
 		return false;
 		
 	}
+	
+	
+	public static String getUsername(){ return username;}
+	public static String getPassword(){ return password;}
 }
 
 
