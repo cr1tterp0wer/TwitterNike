@@ -1,1 +1,2 @@
-geoloc=cc=US,rc=CA,tp=vhigh,tz=PST,la=37.7795,lo=-122.4195,bw=5000
+[General]
+cookies="@Variant(\0\0\0\x7f\0\0\0\x16QList<QNetworkCookie>\0\0\0\0\x1\0\0\0\x3\0\0\0rs_vi=[CS]v1|29B9395485192C9D-40001107E0005603[CE]; expires=Thu, 12-May-2016 19:46:42 GMT; domain=.nike.com; path=/\0\0\0oAnalysisUserId=184.84.222.241.1400010402989213; expires=Wed, 13-May-2015 19:46:42 GMT; domain=.nike.com; path=/\0\0\x1\x1aRT=dm=nike.com&si=21a8c812-b8ce-44f7-8a01-9faca41a15bf&ss=1400007524740&sl=5&tt=0&obo=5&bcn=%2F%2F36f111f7.mpstat.us%2F&r=http%3A%2F%2Fstore.nike.com%2Fus%2Fen_us%2F%3Fd46a5a0bcf79c28f4f7dc4647766408b&hd=1400010403906; expires=Tue, 20-May-2014 19:46:43 GMT; domain=.nike.com; path=/)"

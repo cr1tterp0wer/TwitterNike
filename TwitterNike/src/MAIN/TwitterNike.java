@@ -1,129 +1,72 @@
 package MAIN;
-import twitter4j.*;
-import twitter4j.api.SearchResource;
-import twitter4j.conf.ConfigurationBuilder;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.net.CookieHandler;
-import java.net.CookieManager;
-import java.net.CookiePolicy;
-import java.net.CookieStore;
-import java.net.HttpCookie;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.List;
 
+import Selenium.Sscraper;
+import Twitter.Tlistener;
 
 public class TwitterNike {
 
-	public static TwitterFactory tf;
-	public static Twitter twitter;
+	static Tlistener tl;
+	static Sscraper  scrape;
 	
-	
-	public static void main(String[] args) throws TwitterException, IOException{
-		
-		
-		ConfigurationBuilder cb = new ConfigurationBuilder();
-		cb.setDebugEnabled(true)
-		  .setOAuthConsumerKey("QzdVtRIpzsfACX5v8fPMvgQpH")
-		  .setOAuthConsumerSecret("jynF6cgfjUbchWBru9CmzfoaO0tOpXrFPvnAQP479ZtYutE2oB")
-		  .setOAuthAccessToken("1317397044-IQ3AzpX64rey7SI4BUBCZPDnR7yAIGoyj2195eB")
-		  .setOAuthAccessTokenSecret("vkmuvx8lutiPurIlljRd0Gc2Jfh8GEDhCDUCwMCBM1bLM");
-		tf = new TwitterFactory(cb.build());
-		twitter = tf.getInstance();
-		
-       //listUsers("lyft",1);
-	   //NikeStore 17351972
-       //showHomeTweetsList();
-	   //showUserInfoById(569569550);
-       
-       getCookieUsingCookieHandler("http://www.nike.com");
-		
-		
-	}
-	
-	public static void listUsers(String _user, int _pageNumber) throws TwitterException
+	//arg[0] = username,  arg[1] = pass  :store.Nike.com
+	//arg[2] = ConsumerKey, arg[3] = ConsumerSecret
+	//arg[4] = AccessToken, arg[5] = TokenSecret
+	//arg[6] = TwitterId
+	public static void main(String[] args)
 	{
-		String user = _user;
-		int pageNumber = 1;
-		ResponseList<User> UsersList = twitter.searchUsers(user, pageNumber);
-	    
-		for( User users: UsersList)
+		if(init(args))
 		{
-			if(users.getStatus() != null)
-			{
-				System.out.println("@" +users.getScreenName() + " - " + users.getId());
-			}
-		}
-		
-	}
-	
-	
-	public static void query(String _queryName) throws TwitterException
-	{
-		Query query    = new Query(_queryName);
-		QueryResult qr = twitter.search(query);
-		
-		 for (Status status : qr.getTweets()) {
-		   System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText()); }
-	}
-	
-	public static void showUserInfoById(int _id) throws TwitterException
-	{
-
-        User user  = twitter.showUser(_id);
-        RateLimitStatus rateLimitStatus = user.getRateLimitStatus();
-        
-        System.out.println("@" +user.getScreenName() + " - " + user.getId());
-        System.out.println("Description:         " + user.getDescription());
-        System.out.println("Followers:           " + user.getFollowersCount());
-        System.out.println("Current Tweet/Reply: " + user.getStatus().getText());
-        System.out.println("URL Entity:          " + user.getURLEntity());
-
-        System.out.println("SecondsUntilReset: " + rateLimitStatus.getSecondsUntilReset());
-        
-	}
-	
-	public static void showHomeTweetsList() throws TwitterException
-	{
-	     List<Status> HomeTweetsList  = twitter.getHomeTimeline();
-	     System.out.println("Number showing: " + HomeTweetsList.size());
-	
-		for (Status t : HomeTweetsList) {
-	      System.out.println(t.getCreatedAt() + ": " + t.getText());
+			launch();
 		}
 			
-	        
+
 	}
 	
-	public static void getCookieUsingCookieHandler(String _url) { 
-	    try {       
-	        // Instantiate CookieManager;
-	        // make sure to set CookiePolicy
-	        CookieManager manager = new CookieManager();
-	        manager.setCookiePolicy(CookiePolicy.ACCEPT_ALL);
-	        CookieHandler.setDefault(manager);
-
-	        // get content from URLConnection;
-	        // cookies are set by web site
-	        URL url = new URL(_url);
-	        URLConnection connection = url.openConnection();
-	        connection.getContent();
-
-	        // get cookies from underlying
-	        // CookieStore
-	        CookieStore cookieJar =  manager.getCookieStore();
-	        List <HttpCookie> cookies =
-	            cookieJar.getCookies();
-	        for (HttpCookie cookie: cookies) {
-	          System.out.println("CookieHandler retrieved cookie: " + cookie);
-	        }
-	       //[<Cookie geoloc=cc=US,rc=CA,tp=vhigh,tz=PST,la=37.7795,lo=-122.4195,bw=5000 for .www.nike.com/>]>
-	        
-	    } catch(Exception e) {
-	        System.out.println("Unable to get cookie using CookieHandler");
-	        e.printStackTrace();
-	    }
-	}  
-
+	public static void launch()
+	{
+		
+		
+	}
+	
+	public static boolean init(String[] _args)
+	{
+		String[] args = _args;
+		
+		if(args.length == 7)
+		{
+      	  scrape = new Sscraper( args[0], args[1] );
+		  tl     = new Tlistener(args[2], args[3], args[4],args[5],args[6]);
+		  return true;
+		}
+		//manage with a file
+		else if(args.length == 1)
+		{
+			try{
+			  BufferedReader br = new BufferedReader(new FileReader(args[0]));
+			  StringBuffer stringBuffer = new StringBuffer();
+			  String line = null;
+			 
+			  while((line = br.readLine())!=null){
+			 
+			   stringBuffer.append(line).append("\n");
+			  }
+			   
+			  String   input = stringBuffer.toString();
+			  String[] split = input.split("\\s+");
+			  
+			  for(int i=0;i<split.length;i++)
+				  System.out.println(split[i]);
+			  return true;
+			}catch(IOException e){System.out.println(e.getMessage());}
+			
+		}
+		return false;
+		
+	}
 }
+
+
